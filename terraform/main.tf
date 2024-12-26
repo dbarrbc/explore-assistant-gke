@@ -12,6 +12,8 @@ terraform {
   }
 }
 
+
+
 provider "google" {
   project = "ml-accelerator-dbarr"
   region  = "US"
@@ -41,7 +43,13 @@ resource "google_container_cluster" "primary" {
     name = "llm-app"
     }
  }
- # Deploy the app
+
+##CREATE Random String
+## Create Google Cloud Secret
+## Save string as revision to Cloud Secret
+## Pass as environment variable to GKE
+
+# Deploy the app
  resource "kubernetes_deployment" "llm_app_deployment" {
    metadata {
     name      = "llm-app"
