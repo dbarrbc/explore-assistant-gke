@@ -47,7 +47,7 @@ resource "google_container_cluster" "primary" {
 ##CREATE Random String
 ## Create Google Cloud Secret
 ## Save string as revision to Cloud Secret
-## Pass as environment variable to GKE
+## Pass as environment variable to GKE (VERTEX_CF_AUTH_TOKEN)
 
 # Deploy the app
  resource "kubernetes_deployment" "llm_app_deployment" {
