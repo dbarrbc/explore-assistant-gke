@@ -123,3 +123,6 @@ resource "google_container_cluster" "primary" {
            }
     }
   }
+ output "vertex-auth"{
+   value= random_string.vertexAuth.result
+ }
