@@ -12,7 +12,23 @@ terraform {
   }
 }
 
+resource "random_string" "vertexAuth" {
+  length           = 16
+  special          = true
+  
+}
 
+resource "kubernetes_secret" "vertexAuth" {
+  metadata {
+    name = "vertex-auth"
+  }
+
+  data = {
+    token = random_string.vertexAuth.result
+  }
+
+  type = "kubernetes.io/basic-auth"
+}
 
 provider "google" {
   project = "ml-accelerator-dbarr"
