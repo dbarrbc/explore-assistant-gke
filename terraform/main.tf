@@ -27,7 +27,7 @@ resource "kubernetes_secret" "vertexAuth" {
     token = random_string.vertexAuth.result
   }
 
-  type = "kubernetes.io/basic-auth"
+  type = "kubernetes.io/generic"
 }
 
 provider "google" {
@@ -91,9 +91,14 @@ resource "google_container_cluster" "primary" {
            container {
              name = "llm-app-container"
              image = "us-docker.pkg.dev/ml-accelerator-dbarr/explore-assistant-gke/explore-assist-gke@sha256:2cb4e80b8b580f20eb9e096b1cf1ef1c7cfb071340e27407ab76bcc2292c9a7b"
+             env_from {
+              secret_ref {
+                name = "vertex-auth"
+              }
+             }
              port {
                 container_port = 8000
-              }
+             }
            }
         }
     }
