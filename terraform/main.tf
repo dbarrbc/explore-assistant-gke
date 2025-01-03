@@ -67,7 +67,7 @@ resource "google_container_cluster" "primary" {
 # Deploy the app
  resource "kubernetes_deployment" "llm_app_deployment" {
     depends_on = [
-       kubernetes_secret.vertex_auth,
+       kubernetes_secret.vertex-auth,
     ]
     metadata {
        name      = "llm-app"
