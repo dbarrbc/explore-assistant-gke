@@ -36,7 +36,7 @@ logging.basicConfig(level=logging.INFO)
 # Initialize the Vertex AI
 project = os.environ.get("PROJECT")
 location = os.environ.get("REGION")
-vertex_cf_auth_token = os.environ.get("vertex-auth")
+vertex_cf_auth_token = os.environ.get("vertex_cf_auth_token")
 model_name = os.environ.get("MODEL_NAME", "gemini-1.0-pro-001")
 
 vertexai.init(project=project, location=location)
