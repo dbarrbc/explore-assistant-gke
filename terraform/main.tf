@@ -53,6 +53,7 @@ resource "google_container_cluster" "primary" {
  resource "kubernetes_secret" "vertex-auth" {
     metadata {
        name = "vertex-auth"
+       namespace = kubernetes_namespace.llm_app.metadata.0.name
     }
 
     data = {
@@ -65,18 +66,21 @@ resource "google_container_cluster" "primary" {
 
 # Deploy the app
  resource "kubernetes_deployment" "llm_app_deployment" {
-   metadata {
-    name      = "llm-app"
-    namespace = kubernetes_namespace.llm_app.metadata.0.name
-    labels = {
-       app = "llm-app"
-     }
-   }
- spec {
-     replicas = 2
-     selector {
-        match_labels = {
-           app = "llm-app"
+    depends_on = [
+       kubernetes_secret.vertex_auth,
+    ]
+    metadata {
+       name      = "llm-app"
+       namespace = kubernetes_namespace.llm_app.metadata.0.name
+       labels = {
+          app = "llm-app"
+       }
+    }
+    spec {
+       replicas = 2
+       selector {
+          match_labels = {
+            app = "llm-app"
          }
      }
      template {
