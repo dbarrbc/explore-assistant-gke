@@ -18,21 +18,11 @@ resource "random_string" "vertexAuth" {
   
 }
 
-resource "kubernetes_secret" "vertexAuth" {
-  metadata {
-    name = "vertex-auth"
-  }
 
-  data = {
-    token = random_string.vertexAuth.result
-  }
-
-  type = "kubernetes.io/generic"
-}
 
 provider "google" {
   project = "ml-accelerator-dbarr"
-  region  = "US"
+  region  = "us-west1"
 }
 
 provider "kubernetes" {
@@ -45,7 +35,7 @@ data "google_client_config" "current" {}
 # Create a cluster in GKE
 resource "google_container_cluster" "primary" {
   name     = "llm-app-cluster"
-  location = "US"
+  location = "us-west1"
 
    initial_node_count = 3
 
@@ -60,10 +50,18 @@ resource "google_container_cluster" "primary" {
     }
  }
 
-##CREATE Random String
-## Create Google Cloud Secret
-## Save string as revision to Cloud Secret
-## Pass as environment variable to GKE (VERTEX_CF_AUTH_TOKEN)
+ resource "kubernetes_secret" "vertex-auth" {
+    metadata {
+       name = "vertex-auth"
+    }
+
+    data = {
+       vertex_cf_auth_token = random_string.vertexAuth.result
+       test_token = "monkey"
+    }
+
+    type = "kubernetes.io/generic"
+ }
 
 # Deploy the app
  resource "kubernetes_deployment" "llm_app_deployment" {
